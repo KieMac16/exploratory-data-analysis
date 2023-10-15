@@ -1,7 +1,7 @@
 # Ignore everything by default
 *
 
-# Don't ignore directories (so we can look inside them, for other files)
+# Don't ignore directories
 !*/
 
 # Don't ignore these
