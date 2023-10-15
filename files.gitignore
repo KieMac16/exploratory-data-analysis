@@ -1,6 +1,6 @@
 # Ignore everything by default including the credentials file
 *
-credentials.yaml
+!.credentials.yaml
 
 # Don't ignore directories (so we can look inside them, for other files)
 !*/
