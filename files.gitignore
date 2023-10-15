@@ -1,6 +1,5 @@
-# Ignore everything by default including the credentials file
+# Ignore everything by default
 *
-!.credentials.yaml
 
 # Don't ignore directories (so we can look inside them, for other files)
 !*/
@@ -10,3 +9,6 @@
 !*.yml
 !.gitattributes
 !.gitignore
+
+# Ignore the credentials.yaml file
+!.credentials.yaml
