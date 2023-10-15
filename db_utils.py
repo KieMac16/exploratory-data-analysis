@@ -1,1 +1,5 @@
-class RDSDatabaseConnector    
+import yaml
+
+class RDSDatabaseConnector
+
+def 
