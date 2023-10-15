@@ -12,11 +12,12 @@ class RDSDatabaseConnector:
         self.credentials = credentials
 
     def create_engine(self):
+        from sqlalchemy import create_engine
         connection_str = f"postgresql://{self.credentials['RDS_USER']}:{self.credentials['RDS_PASSWORD']}@{self.credentials['RDS_HOST']}:{self.credentials['RDS_PORT']}/{self.credentials['RDS_DATABASE']}"
         self.engine = sqlalchemy.create_engine(connection_str)
 
     def extract_data(self):
-        query = "SELECT * FROM loans_payments"
+        query = "SELECT * FROM loan_payments"
         return pd.read_sql(query, self.engine)
 
 def save_to_csv(dataframe, filename):
@@ -27,4 +28,4 @@ if __name__ == "__main__":
     rds_connector = RDSDatabaseConnector(credentials)
     rds_connector.create_engine()
     data = rds_connector.extract_data()
-    save_to_csv(data, "loans_payments.csv")
+    save_to_csv(data, "loan_payments.csv")
