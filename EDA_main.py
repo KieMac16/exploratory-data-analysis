@@ -1,30 +1,16 @@
-import pandas as pd
 import matplotlib.pyplot as plt
-import plotly.express as px
 import missingno as msno
+import numpy as np
+import pandas as pd
+import plotly.express as px
+import statsmodels.api as sm
 
 file_path = 'C:/Users/kiera/KieMac/exploratory-data-analysis/loan_payments.csv'
 df = pd.read_csv(file_path)
 
-class DataTransform:
-    def __init__(self, dataframe):
-        self.dataframe = dataframe
+df.info()
 
-    def convert_to_numeric(self, column_name):
-        self.dataframe[column_name] = pd.to_numeric(self.dataframe[column_name], errors='coerce')
-
-    def convert_to_date(self, column_name, date_format='%b-%Y'):
-        self.dataframe[column_name] = pd.to_datetime(self.dataframe[column_name], format=date_format, errors='coerce')
-
-    def make_categorical(self, column_name):
-        self.dataframe[column_name] = self.dataframe[column_name].astype('category')
-
-    def convert_to_boolean(self, column_name, true_values=['y'], false_values=['n']):
-        self.dataframe[column_name] = self.dataframe[column_name].isin(true_values)
-
-    def remove_excess_symbols(self, column_name, symbol_to_remove):
-        self.dataframe[column_name] = self.dataframe[column_name].str.replace(symbol_to_remove, '')
-        
+from convert_column_formats import DataTransform
 column_transform = DataTransform(df)
 
 # Remove excess symbols from column(s) - I've made this but don't think I need it upon inspecting the data
@@ -58,48 +44,7 @@ column_transform.make_categorical('application_type')
 # Convert column(s) to boolean:
 column_transform.convert_to_boolean('payment_plan')
 
-class DataFrameInfo:
-    def __init__(self, dataframe):
-        self.dataframe = dataframe
-
-    def describe_columns(self):
-        return self.dataframe.dtypes
-
-    def extract_statistics(self):
-        return self.dataframe.describe()
-
-    def count_distinct_values(self):
-        return self.dataframe.nunique()
-
-    def print_shape(self):
-        return self.dataframe.shape
-
-    def count_null_values(self):
-        return self.dataframe.isnull().sum()
-
-    def percentage_null_values(self):
-        total_rows = len(self.dataframe)
-        return (self.dataframe.isnull().sum() / total_rows) * 100
-
-df_info = DataFrameInfo(df)
-
-class DataFrameTransform:
-    def __init__(self, dataframe):
-        self.dataframe = dataframe
-
-    def count_null_values(self):
-        return self.dataframe.isnull().sum()
-    
-    def impute_missing(self, column_name, impute_with='mean'):
-        if impute_with == 'mean':
-            self.dataframe[column_name].fillna(self.dataframe[column_name].mean(), inplace=True)
-        elif impute_with == 'median':
-            self.dataframe[column_name].fillna(self.dataframe[column_name].median(), inplace=True)
-        elif impute_with == 'mode':
-            self.dataframe[column_name].fillna(self.dataframe[column_name].mode(), inplace=True)
-        else:
-            ValueError
-
+from df_transform import DataFrameTransform
 transform_df = DataFrameTransform(df)
 
 '''Based on analysis in df_transform.py I am ready to drop the following columns'''
@@ -121,19 +66,29 @@ transform_df.impute_missing('int_rate','mean') # Very similar to the median
 transform_df.impute_missing('term','mean') # Only between 2 values
 transform_df.impute_missing('employment_length','median')
 
-print(transform_df.count_null_values())
+'''This checks whether all columns have no NULL values'''
+from get_info_from_df import DataFrameInfo
+df_info = DataFrameInfo(df)
 
-class Plotter:
-    def __init__(self, dataframe):
-        self.dataframe = dataframe
-
-    def plot_null_values(self):
-        null_counts = self.dataframe.isnull().sum()
-        null_counts.plot(kind='bar')
-        plt.title('NULL Values in Columns')
-        plt.xlabel('Columns')
-        plt.ylabel('Count of NULL Values')
-        plt.show()
-
+'''Now I will use the Plotter Class to continue with analysis, looking at skewness and outliers'''
+from df_transform import Plotter
 plot = Plotter(df)
-plot.plot_null_values()
+
+'''I used a QQ Graph in check_for_skewness_outliers.py to determine the following columns to transform:'''
+skewed_columns = df[['loan_amount', 'funded_amount', 'int_rate', 'instalment', 'annual_inc', 'dti', 'open_accounts', 'total_accounts', 'total_payment', 'total_rec_prncp', 'last_payment_amount']].skew()
+transform_df.transform_skewed_columns(skewed_columns) # Transforms the skewed columns, using a graph after the transformation to ensure it has
+
+'''I used a series of box plots in check_for_skewness_outliers to determine the following columns to transform:'''
+outlier_columns = df[['loan_amount', 'funded_amount', 'int_rate', 'instalment', 'annual_inc', 'dti', 'open_accounts', 'total_accounts', 'total_payment', 'total_payment_inv', 'total_rec_prncp', 'total_rec_int', 'last_payment_amount']]
+remove_outliers = transform_df.remove_outliers(outlier_columns.columns, z_threshold=3) # Removed outliers
+'''After I removed outliers, I used the box plots to determine 3 columns to remove from my outlier_columns list as the box plots were centred at 0'''
+
+'''Create a heatmap of the numerical columns to inspect and decide on further columns to drop'''
+# numeric_columns = df.select_dtypes(include=['number']) # Allows me to create a heatmap as I need numeric values
+# px.imshow(numeric_columns.corr(), title="Correlation Heatmap of the DF").show()
+
+#The following columns had an heatmap rating greater than 0.85 with another column:
+highly_correlated_columns = df[['member_id','funded_amount','funded_amount_inv','instalment','out_prncp_inv','total_payment_inv','total_rec_prncp',]]
+df.drop(highly_correlated_columns, axis=1, inplace=True)
+
+df.info()

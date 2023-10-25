@@ -29,6 +29,7 @@ def save_to_csv(dataframe, filename):
     dataframe.to_csv(filename, index=False)
 
 if __name__ == "__main__":
+    '''If this py file is run, it will run the following code also'''
     credentials = load_credentials()
     rds_connector = RDSDatabaseConnector(credentials)
     rds_connector.create_engine()
