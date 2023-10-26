@@ -2,7 +2,7 @@
 # import matplotlib.pyplot as plt # make sure you have .pyplot as matplotlib wouldn't plot my matrix
 # import plotly.express as px
 # import missingno as msno
-# import numpy as np
+import numpy as np
 
 # file_path = 'C:/Users/kiera/KieMac/exploratory-data-analysis/loan_payments.csv'
 # df = pd.read_csv(file_path)

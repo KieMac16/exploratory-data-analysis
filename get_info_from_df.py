@@ -31,6 +31,6 @@ df_info = DataFrameInfo(df)
 #print(df_info.describe_columns()) # Describe all columns
 #print(df_info.extract_statistics()) # Extract statistical values
 #print(df_info.count_distinct_values()) # Count distinct values in categorical columns
-#print(df_info.print_shape()) # Print out the shape of the df
-#print(df_info.count_null_values()) # Generate a count of NULL values in each column
+print(df_info.print_shape()) # Print out the shape of the df
+print(df_info.count_null_values()) # Generate a count of NULL values in each column
 #print(df_info.percentage_null_values()) # Generate a percentage count of NULL values in each column
