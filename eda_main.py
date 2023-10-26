@@ -86,6 +86,8 @@ px.imshow(numeric_columns.corr(), title="Correlation Heatmap of the DF").show()
 highly_correlated_columns = df[['member_id','funded_amount_inv','instalment','out_prncp_inv','total_payment_inv','total_rec_prncp',]]
 df.drop(highly_correlated_columns, axis=1, inplace=True)
 
+# df.info()
+
 '''The following code will analyse the data and identify KPI and areas of interest'''
 separator = '-' * 60 # Use this to separate different sections of information
 
@@ -118,7 +120,6 @@ print(separator)
 print('PROJECTIONS')
 print(f"Total amount projected to recover after {projection_month} months: ${total_projected_amount:.0f}")
 print(f"Total projected percentage recovered after {projection_month} months: {percentage_received_6_months:.1f}%")
-
 
 '''I used a search engine to get me some code to produce data visualisations:
 
