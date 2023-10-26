@@ -62,8 +62,8 @@ transform_df.impute_missing('term','mean') # Only between 2 values
 transform_df.impute_missing('employment_length','median')
 
 '''This checks whether all columns have no NULL values, but the code has been commented out'''
-from get_info_from_df import DataFrameInfo
-df_info = DataFrameInfo(df)
+# from get_info_from_df import DataFrameInfo
+# df_info = DataFrameInfo(df)
 # print(df_info.count_null_values()) # Generate a count of NULL values in each column
 
 '''Now I will use the Plotter Class to continue with analysis, looking at skewness and outliers'''
