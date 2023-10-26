@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import plotly.express as px
 import seaborn as sns
 
 file_path = 'C:/Users/kiera/KieMac/exploratory-data-analysis/loan_payments.csv'
@@ -78,14 +79,12 @@ remove_outliers = transform_df.remove_outliers(outlier_columns.columns, z_thresh
 '''After I removed outliers, I used the box plots to determine 3 columns to remove from my outlier_columns list as the box plots were centred at 0'''
 
 '''Create a heatmap of the numerical columns to inspect and decide on further columns to drop'''
-# numeric_columns = df.select_dtypes(include=['number']) # Allows me to create a heatmap as I need numeric values
-# px.imshow(numeric_columns.corr(), title="Correlation Heatmap of the DF").show()
+numeric_columns = df.select_dtypes(include=['number']) # Allows me to create a heatmap as I need numeric values
+px.imshow(numeric_columns.corr(), title="Correlation Heatmap of the DF").show()
 
 #The following columns had an heatmap rating greater than 0.85 with another column:
 highly_correlated_columns = df[['member_id','funded_amount_inv','instalment','out_prncp_inv','total_payment_inv','total_rec_prncp',]]
 df.drop(highly_correlated_columns, axis=1, inplace=True)
-
-# df.info()
 
 '''The following code will analyse the data and identify KPI and areas of interest'''
 separator = '-' * 60 # Use this to separate different sections of information
@@ -127,15 +126,15 @@ I went for a bar chart for obvious reasons.
 I looked at a speedometer style visualisation for percentages but it didn't look good.
 Taking this data into SQL or Power BI would be a preferred next step to work better with cleaned data.
 '''
-# categories = ['Received', 'Funded', 'Projected']
-# values = [total_received,total_funded,total_after_projection]
+categories = ['Received', 'Funded', 'Projected']
+values = [total_received,total_funded,total_after_projection]
 
-# # Create a bar chart to visualise the 3 categories
-# plt.figure(figsize=(8, 6))
-# plt.bar(categories, values, color=['black','red','blue'])
-# plt.title('Received v Funded v Projected')
-# plt.ylabel('Amount $')
-# plt.show()
+# Create a bar chart to visualise the 3 categories
+plt.figure(figsize=(8, 6))
+plt.bar(categories, values, color=['black','red','blue'])
+plt.title('Received v Funded v Projected')
+plt.ylabel('Amount $')
+plt.show()
 
 '''Now I want to look at the loans that have been charged off - recorded as loss from the company'''
 charged_off_loans = df[df['loan_status'] == 'Charged Off'] # Filter to charged off
