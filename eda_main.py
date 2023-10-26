@@ -315,7 +315,7 @@ ax2.tick_params(axis='y', labelcolor=charged_off_color)
 # Add a legend for both datasets
 fig.legend(loc='upper right', bbox_to_anchor=(0.9, 0.85))
 
-plt.title("Comparison of Counts of At-Risk and Charged-Off Loans by Grade")
+plt.title("Comparison of Counts of At-Risk and Charged-Off Loans by Purpose")
 plt.show()
 
 '''Next, I will look at the debt-to-income (dti) ratio, to gauge whether this has had an impact on repayments'''
