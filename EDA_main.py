@@ -6,8 +6,6 @@ import seaborn as sns
 file_path = 'C:/Users/kiera/KieMac/exploratory-data-analysis/loan_payments.csv'
 df = pd.read_csv(file_path)
 
-# df.info()
-
 from convert_column_formats import DataTransform
 column_transform = DataTransform(df)
 
