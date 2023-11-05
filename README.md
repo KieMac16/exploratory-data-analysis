@@ -19,6 +19,8 @@ The project had three significant steps:
 
 This project was created on VSCode, using a Windows machine. I had downloaded Python from the extensions and ensured my environment was able to install using 'pip' commands.
 
+Example: pip install numpy
+
 To use all features within these files, you will need to install to run the following:
 
 - import matplotlib.pyplot as plt
@@ -83,3 +85,5 @@ Possible loss
 Indicators of loss  
 
 ##### License Information:  <a name="LI"></a>
+
+MIT
